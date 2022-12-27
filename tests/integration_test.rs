@@ -33,7 +33,7 @@ mod tests {
 
         let mut c_lens = Vec::new();
 
-        println!("\ntest #1: Huffman Code for Uniform Distribution (8 codes).");
+        println!("\nTest #1: Huffman Code for Uniform Distribution (8 codes).");
         for (k,v) in huffman_gen.code_map.borrow().iter() {
             println!("key = {}, code = {}", &k, &v.code);
             c_lens.push(v.code.len());
@@ -76,7 +76,7 @@ mod tests {
         let mut code_lengths = Vec::new();
         let mut probs = Vec::new();
 
-        println!("\ntest #2: Testing if the code satisfies Shannon's Source Coding Theorem.");
+        println!("\nTest #2: Testing if the code satisfies Shannon's Source Coding Theorem.");
         for (k,v) in huffman_gen.code_map.borrow().iter() {
             println!("key = {}, code = {}", &k, &v.code);
 
