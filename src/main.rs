@@ -1,4 +1,6 @@
 use huffman_coding::node::Node;
+use huffman_coding::huffman::BSearch;
+
 
 fn main() {
     let alphabets = vec![
@@ -17,17 +19,10 @@ fn main() {
         0.15
     ];
 
-    let tree_node = Node::build(&alphabets, &probs).unwrap();
+    // let tree_node = Node::build(&alphabets, &probs).unwrap();
     
-    println!("propagating on left");
-    tree_node.left.as_ref().unwrap().downstream_codes();
-    // tree_node.left.as_ref().unwrap().update_lr();
-
-    println!("propagating on right");
-    tree_node.right.as_ref().unwrap().downstream_codes();
-    // tree_node.right.as_ref().unwrap().update_lr();
-    
-    //println!("{:?}", tree_node);
+    let b_search = BSearch::build(&alphabets, &probs);
+    b_search.propagate_codes();
 
 }
 

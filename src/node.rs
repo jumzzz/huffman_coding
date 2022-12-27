@@ -43,7 +43,7 @@ impl Node {
     }
 
     pub fn build(alphabets: &Vec<String>, 
-                 probs: &Vec<f32>) -> Option<Node> {
+                 probs: &Vec<f32>) -> Option<Box<Node>> {
         // panic if alphabets and probs are not equal
         assert_eq!(alphabets.len(), probs.len());
         assert!(alphabets.len() > 1);
@@ -82,7 +82,7 @@ impl Node {
 
             if init_nodes.is_empty() {
                 parent_node.update_lr();
-                return Some(parent_node);
+                return Some(Box::new(parent_node));
             }
             init_nodes.push(parent_node);
         }

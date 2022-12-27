@@ -22,31 +22,31 @@ impl HuffmanCode {
 
 #[derive(Debug)]
 pub struct BSearch {
-    pub tree: Node,
-    pub encoded_list: Vec<HuffmanCode>,
+    pub tree: Option<Box<Node>>,
 }
-
-
 
 impl BSearch {
 
     pub fn build(alphabets: &Vec<String>, 
         probs: &Vec<f32>) -> BSearch {
        
-        let tree = Node::build(alphabets, probs).unwrap();
+        let tree = Node::build(alphabets, probs);
 
         BSearch { tree: tree }
-
     }
 
     pub fn propagate_codes(&self) {
 
-        let curr_ref = &self.tree;
 
-        let mut queue = vec![curr_ref];
+        let mut queue = vec![&self.tree];
 
         while !queue.is_empty() {
-            let last = queue.last().unwrap();
+
+            let last_idx = queue.len() - 1;
+            let last = queue[last_idx].as_ref().unwrap();
+            // let last = (*queue.last()).unwrap();
+
+            println!("last_idx = {}", last_idx);
 
             if last.get_fill_status() {
                 queue.pop();
@@ -54,17 +54,46 @@ impl BSearch {
             }
             else {
 
+                let lnode_binding = &last.as_ref().left;
+                let rnode_binding = &last.as_ref().right;
+
+                let lnode : &Node = lnode_binding.as_ref().unwrap();
+                let rnode : &Node = rnode_binding.as_ref().unwrap();
+
+                let mut lnode_filled = false;
+                let mut rnode_filled = false;
+
+                if lnode.get_fill_status() {
+                    println!("lnode.codes = {:?}", lnode.codes);
+                    println!("lnode.c = {:?}", lnode.c);
+                    println!("lnode.prob = {:?}", lnode.prob);
+                    lnode_filled = true;
+                
+                }
+                else {
+                    lnode.downstream_codes();
+                    queue.push(lnode_binding);
+
+                }
+
+                println!("");
+
+                if rnode.get_fill_status() {
+                    println!("rnode.codes = {:?}", rnode.codes);
+                    println!("rnode.c = {:?}", rnode.c);
+                    println!("rnode.prob = {:?}", rnode.prob);
+                    rnode_filled = true;
+                }
+                else {
+                    rnode.downstream_codes();
+                    queue.push(rnode_binding);
+
+                }
+
+                if lnode_filled && rnode_filled {
+                    last.update_fill(true);
+                }
             }
-
-            let lnode_binding = last.left.as_ref().unwrap();
-            let rnode_binding = last.right.as_ref().unwrap();
-
-            let lnode : &Node = lnode_binding.borrow();
-            let rnode : &Node = rnode_binding.borrow();
-
-            queue.push(lnode);
-            queue.push(rnode);
-
         }
     }
 }
