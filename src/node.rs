@@ -103,7 +103,6 @@ impl Node {
         let mut lcodes = lbinding.codes.borrow_mut();
         let mut rcodes = rbinding.codes.borrow_mut();
     
-
         lcodes.push_str(&String::from("0"));
         rcodes.push_str(&String::from("1"));
 
@@ -145,13 +144,5 @@ impl Node {
         }
         
     }
-
-
-
-
-
-
-    
-
 
 }
