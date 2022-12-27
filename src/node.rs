@@ -68,11 +68,6 @@ impl Node {
                 b.prob.partial_cmp(&a.prob).unwrap()
             );
 
-            println!("trial: ");
-            for n in init_nodes.iter() {
-                println!("n = {}", &n.prob);
-            }
-
             let left_node = init_nodes.pop().unwrap();
             let right_node = init_nodes.pop().unwrap(); 
 
@@ -112,9 +107,17 @@ impl Node {
         lcodes.push_str(&String::from("0"));
         rcodes.push_str(&String::from("1"));
 
-        println!("codes in lcodes = {:?}", &lcodes);
-        println!("codes in rcodes = {:?}", &rcodes);
+    }
 
+    pub fn is_base_node(&self) -> bool {
+        match self.c.as_ref() {
+            Some(x) => {
+                return x != &String::from("");
+            },
+            _ => {
+                return false;
+            }
+        }
     }
 
     pub fn downstream_codes(&self) {
@@ -136,9 +139,6 @@ impl Node {
 
                 lcodes.push_str(&String::from("0"));
                 rcodes.push_str(&String::from("1"));
-                
-                println!("codes in lcodes = {:?}", &lcodes);
-                println!("codes in rcodes = {:?}", &rcodes);
             
             },
             (_, _) => println!("End of the line"),

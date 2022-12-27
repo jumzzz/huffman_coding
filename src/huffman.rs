@@ -1,5 +1,6 @@
 use std::borrow::Borrow;
-use std::cell::{Cell, RefCell};
+use std::cell::RefCell;
+use std::collections::BTreeMap;
 
 use crate::node::Node;
 
@@ -23,6 +24,7 @@ impl HuffmanCode {
 #[derive(Debug)]
 pub struct HuffmanGenerator {
     pub tree: Option<Box<Node>>,
+    pub code_map: RefCell<BTreeMap<String, HuffmanCode>>
 }
 
 impl HuffmanGenerator {
@@ -32,21 +34,48 @@ impl HuffmanGenerator {
        
         let tree = Node::build(alphabets, probs);
 
-        HuffmanGenerator { tree: tree }
+        HuffmanGenerator {
+             tree: tree, 
+             code_map: RefCell::new(BTreeMap::new())
+        }
+    }
+
+    fn update_code_list(&self, huffman_code: HuffmanCode) {
+        let mut code_list = self.code_map.borrow_mut();
+        code_list.insert(huffman_code.alphabet.clone(), huffman_code);
+    }
+
+    fn update_child(&self, node_binding: &Option<Box<Node>>) -> bool {
+        let node: &Node = node_binding.as_ref().unwrap();
+
+        if node.get_fill_status() {
+            if node.is_base_node() {
+                let alphabet = node.c.borrow().clone().unwrap();
+                let codes = node.codes.borrow().clone();
+                let prob = node.prob.clone();
+
+                let huffman_code = HuffmanCode::new(
+                                            alphabet, 
+                                            codes, 
+                                            prob
+                                        );
+
+                self.update_code_list(huffman_code);
+            }
+            return true;
+        }
+        
+        node.downstream_codes();
+        return false;
     }
 
     pub fn propagate_codes(&self) {
-
 
         let mut queue = vec![&self.tree];
 
         while !queue.is_empty() {
 
-            let last_idx = queue.len() - 1;
-            let last = queue[last_idx].as_ref().unwrap();
-            // let last = (*queue.last()).unwrap();
-
-            println!("last_idx = {}", last_idx);
+            let last = queue.last().unwrap().as_ref().unwrap();
 
             if last.get_fill_status() {
                 queue.pop();
@@ -57,37 +86,15 @@ impl HuffmanGenerator {
                 let lnode_binding = &last.as_ref().left;
                 let rnode_binding = &last.as_ref().right;
 
-                let lnode : &Node = lnode_binding.as_ref().unwrap();
-                let rnode : &Node = rnode_binding.as_ref().unwrap();
+                let lnode_filled = self.update_child(lnode_binding);
+                let rnode_filled = self.update_child(rnode_binding);
 
-                let mut lnode_filled = false;
-                let mut rnode_filled = false;
-
-                if lnode.get_fill_status() {
-                    println!("lnode.codes = {:?}", lnode.codes);
-                    println!("lnode.c = {:?}", lnode.c);
-                    println!("lnode.prob = {:?}", lnode.prob);
-                    lnode_filled = true;
-                
-                }
-                else {
-                    lnode.downstream_codes();
+                if !lnode_filled {
                     queue.push(lnode_binding);
-
                 }
 
-                println!("");
-
-                if rnode.get_fill_status() {
-                    println!("rnode.codes = {:?}", rnode.codes);
-                    println!("rnode.c = {:?}", rnode.c);
-                    println!("rnode.prob = {:?}", rnode.prob);
-                    rnode_filled = true;
-                }
-                else {
-                    rnode.downstream_codes();
+                if !rnode_filled {
                     queue.push(rnode_binding);
-
                 }
 
                 if lnode_filled && rnode_filled {
@@ -95,5 +102,6 @@ impl HuffmanGenerator {
                 }
             }
         }
+
     }
 }

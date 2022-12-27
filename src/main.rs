@@ -1,7 +1,4 @@
-use huffman_coding::node::Node;
 use huffman_coding::huffman::HuffmanGenerator;
-
-
 fn main() {
     let alphabets = vec![
         "a".to_string(),
@@ -23,6 +20,10 @@ fn main() {
     
     let b_search = HuffmanGenerator::build(&alphabets, &probs);
     b_search.propagate_codes();
+
+    for hc in b_search.code_map.borrow().iter() {
+        println!("{:?}", &hc);
+    }
 
 }
 
