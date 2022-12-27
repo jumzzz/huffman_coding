@@ -21,18 +21,18 @@ impl HuffmanCode {
 }
 
 #[derive(Debug)]
-pub struct BSearch {
+pub struct HuffmanGenerator {
     pub tree: Option<Box<Node>>,
 }
 
-impl BSearch {
+impl HuffmanGenerator {
 
     pub fn build(alphabets: &Vec<String>, 
-        probs: &Vec<f32>) -> BSearch {
+        probs: &Vec<f32>) -> HuffmanGenerator {
        
         let tree = Node::build(alphabets, probs);
 
-        BSearch { tree: tree }
+        HuffmanGenerator { tree: tree }
     }
 
     pub fn propagate_codes(&self) {

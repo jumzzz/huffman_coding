@@ -1,5 +1,5 @@
 use huffman_coding::node::Node;
-use huffman_coding::huffman::BSearch;
+use huffman_coding::huffman::HuffmanGenerator;
 
 
 fn main() {
@@ -21,7 +21,7 @@ fn main() {
 
     // let tree_node = Node::build(&alphabets, &probs).unwrap();
     
-    let b_search = BSearch::build(&alphabets, &probs);
+    let b_search = HuffmanGenerator::build(&alphabets, &probs);
     b_search.propagate_codes();
 
 }
