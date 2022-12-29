@@ -115,7 +115,7 @@ mod tests {
     /// H can be no bigger than max(p_max, 0.086). (Gallager, 1978)
     #[test]
     fn test_max_limit() {
-        // (Gallager, 1978). The Difference
+        
         let probs: Vec<f32> = [1.0 / 11.0 ; 11].to_vec();
         
         let alphabets = vec![

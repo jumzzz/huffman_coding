@@ -35,7 +35,7 @@ impl HuffmanGenerator {
         let tree = Node::build(alphabets, probs);
 
         HuffmanGenerator {
-             tree: tree, 
+             tree, 
              code_map: RefCell::new(BTreeMap::new())
         }
     }
@@ -52,7 +52,7 @@ impl HuffmanGenerator {
             if node.is_base_node() {
                 let alphabet = node.c.borrow().clone().unwrap();
                 let codes = node.codes.borrow().clone();
-                let prob = node.prob.clone();
+                let prob = node.prob;
 
                 let huffman_code = HuffmanCode::new(
                                             alphabet, 
@@ -66,7 +66,7 @@ impl HuffmanGenerator {
         }
         
         node.downstream_codes();
-        return false;
+        false
     }
 
     pub fn propagate_codes(&self) {

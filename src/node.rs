@@ -33,10 +33,10 @@ impl Node {
            left: Option<Box<Node>>, 
            right: Option<Box<Node>>) -> Node {
         Node {
-            c: c,
-            prob: prob,
-            left: left,
-            right: right,
+            c,
+            prob,
+            left,
+            right,
             filled: Cell::new(true),
             codes: RefCell::new(String::new()),
         }
@@ -111,10 +111,10 @@ impl Node {
     pub fn is_base_node(&self) -> bool {
         match self.c.as_ref() {
             Some(x) => {
-                return x != &String::from("");
+                x != &String::from("")
             },
             _ => {
-                return false;
+                false
             }
         }
     }
@@ -130,11 +130,11 @@ impl Node {
                 let mut lcodes = x.codes.borrow_mut();
                 let mut rcodes = y.codes.borrow_mut();
 
-                let mut to_left = self.codes.borrow().clone();
-                let mut to_right  = self.codes.borrow().clone();
+                let to_left = self.codes.borrow().clone();
+                let to_right  = self.codes.borrow().clone();
         
-                lcodes.push_str(&mut to_left);
-                rcodes.push_str(&mut to_right);
+                lcodes.push_str(&to_left);
+                rcodes.push_str(&to_right);
 
                 lcodes.push_str(&String::from("0"));
                 rcodes.push_str(&String::from("1"));
