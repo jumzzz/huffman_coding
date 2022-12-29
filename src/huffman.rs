@@ -23,7 +23,6 @@ impl HuffmanCode {
 
 #[derive(Debug)]
 pub struct HuffmanGenerator {
-    pub tree: Option<Box<Node>>,
     pub code_map: RefCell<BTreeMap<String, HuffmanCode>>
 }
 
@@ -32,12 +31,12 @@ impl HuffmanGenerator {
     pub fn build(alphabets: &Vec<String>, 
         probs: &Vec<f32>) -> HuffmanGenerator {
        
-        let tree = Node::build(alphabets, probs);
-
-        HuffmanGenerator {
-             tree, 
+        let huffman_gen = HuffmanGenerator {
              code_map: RefCell::new(BTreeMap::new())
-        }
+        };
+
+        huffman_gen.propagate_codes(alphabets, probs);
+        huffman_gen
     }
 
     fn update_code_list(&self, huffman_code: HuffmanCode) {
@@ -69,9 +68,13 @@ impl HuffmanGenerator {
         false
     }
 
-    pub fn propagate_codes(&self) {
+    pub fn propagate_codes(&self, alphabets: &Vec<String>, 
+                                  probs: &Vec<f32> 
+                                  ) {
 
-        let mut queue = vec![&self.tree];
+        let tree = Node::build(alphabets, probs);
+        
+        let mut queue = vec![&tree];
 
         while !queue.is_empty() {
 

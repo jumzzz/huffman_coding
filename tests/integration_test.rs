@@ -29,7 +29,6 @@ mod tests {
         ];
 
         let huffman_gen = HuffmanGenerator::build(&alphabets, &probs);
-        huffman_gen.propagate_codes();
 
         let mut c_lens = Vec::new();
 
@@ -71,7 +70,6 @@ mod tests {
         ];
 
         let huffman_gen = HuffmanGenerator::build(&alphabets, &probs);
-        huffman_gen.propagate_codes();
 
         let mut code_lengths = Vec::new();
         let mut probs = Vec::new();
@@ -134,7 +132,6 @@ mod tests {
         
 
         let huffman_gen = HuffmanGenerator::build(&alphabets, &probs);
-        huffman_gen.propagate_codes();
 
         let mut code_lengths = Vec::new();
         let mut probs = Vec::new();

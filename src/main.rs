@@ -19,7 +19,6 @@ fn main() {
     // let tree_node = Node::build(&alphabets, &probs).unwrap();
     
     let b_search = HuffmanGenerator::build(&alphabets, &probs);
-    b_search.propagate_codes();
 
     for hc in b_search.code_map.borrow().iter() {
         println!("{:?}", &hc);
